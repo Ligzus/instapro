@@ -38,12 +38,29 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
 
     appEl.innerHTML = appHtml;
 
-    document.getElementById("add-button").addEventListener("click", () => {
-      onAddPostClick({
-        description: "Описание картинки",
-        imageUrl: "https://image.png",
-      });
-    });
+
+    const inputPhotoElement = document.getElementById("choose-photo");
+    const inputTextElement = document.getElementById("add-text");
+    
+    function newPost() {
+      document.getElementById("add-button").addEventListener("click", () => {
+        
+        const trimmedText = inputTextElement.value.trim();
+
+        inputTextElement.classList.remove("form-error");
+        if (trimmedText === "") {
+          inputTextElement.classList.add("form-error");
+          return;
+        };
+
+        onAddPostClick({
+          description: trimmedText,
+          imageUrl: inputPhotoElement.value,
+        });
+      });      
+    };
+
+    newPost();
   };
 
   render();    
