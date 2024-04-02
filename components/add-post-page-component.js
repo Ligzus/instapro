@@ -1,6 +1,6 @@
 // Добавляем посты:
 import { renderHeaderComponent } from "./header-component.js";
-
+import { baseHost } from "../api.js";
 
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
@@ -17,15 +17,16 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
           <p class="post-text">Описание:</p> 
           <input type="text" id="add-text" class="textarea"/>
 
-          <label class="file-upload-label secondary-button">
-            <input
-              value=""
-              id="choose-photo"
-              type="file"
-              class="file-upload-input"
-              style="display:none"
-            > Открыть галерею
-          </label>   
+          <div class="upload-image-container">
+
+            <div class="upload-image">                
+              <label class="file-upload-label secondary-button">
+                <input type="file" id="image-input" class="file-upload-input" style="display:none">
+                Выберите фото
+              </label>               
+            </div>
+
+          </div> 
                           
           <button class="button" id="add-button">
             Добавить
@@ -39,8 +40,34 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     appEl.innerHTML = appHtml;
 
 
-    const inputPhotoElement = document.getElementById("choose-photo");
+    const inputPhotoElement = document.getElementById("image-input");
     const inputTextElement = document.getElementById("add-text");
+
+    const uploadImgContainer = document.querySelector(".upload-image-container");
+
+    const needUploadImg = `
+    <div class="upload-image">                
+      <label class="file-upload-label secondary-button">
+        <input type="file" id="image-input" class="file-upload-input" style="display:none">
+        Выберите фото
+      </label>               
+    </div>
+    `
+    const uploadImg = `
+    <div class="upload-image">      
+      <div class="file-upload-image-conrainer">
+        <img class="file-upload-image" src="">
+        <button class="file-upload-remove-button button">Заменить фото</button>
+      </div>          
+    </div> `;
+
+    inputPhotoElement.addEventListener("change", () => {
+      if (inputPhotoElement.files.length > 0) {
+        uploadImgContainer.innerHTML = uploadImg;
+      } else {
+        uploadImgContainer.innerHTML = needUploadImg;
+      }    
+    }); 
     
     function newPost() {
       document.getElementById("add-button").addEventListener("click", () => {
