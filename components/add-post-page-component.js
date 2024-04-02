@@ -1,6 +1,6 @@
 // Добавляем посты:
 import { renderHeaderComponent } from "./header-component.js";
-import { baseHost } from "../api.js";
+import { uploadImage } from "../api.js";
 
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
@@ -56,28 +56,20 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     inputPhotoElement.addEventListener("change", () => {
       if (inputPhotoElement.files.length > 0) {
         uploadImgContainer.innerHTML = uploadImg;
-
-        // Отправляем фото в облако <input type="file" id="image-input" />
-        const fileInputElement = document.getElementById("image-input");
-        postImage({ file: fileInputElement.files });
-
-        function postImage({ file }) {
-          const data = new FormData();
-          data.append("file", file);
-
-          return fetch(baseHost + "/api/upload/image", {
-            method: "POST",
-            body: data,
-          })
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data.fileUrl);
-          });
-        }
+    
+        // Получаем файл из inputPhotoElement
+        const file = inputPhotoElement.files[0];
+    
+        // Отправляем фото в облако
+        uploadImage({ file })
+        .then((data) => {
+          // Кладем URL в атрибут src изображения
+          document.getElementById("image-input").src = data.fileUrl;
+          console.log(data.fileUrl);
+        });        
       }   
-    }); 
+    });
+    
     
     function newPost() {
       document.getElementById("add-button").addEventListener("click", () => {
@@ -92,7 +84,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
 
         onAddPostClick({
           description: trimmedText,
-          imageUrl: inputPhotoElement.value,
+          imageUrl: document.getElementById("image-input").src,
         });
       });      
     };

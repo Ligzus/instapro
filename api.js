@@ -66,6 +66,6 @@ export function uploadImage({ file }) {
     method: "POST",
     body: data,
   }).then((response) => {
-    return response.json();
-  });
+    return response.json();    
+  })  
 }
