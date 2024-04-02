@@ -48,7 +48,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     const uploadImg = `
     <div class="upload-image">      
       <div class="file-upload-image-conrainer">
-        <img class="file-upload-image" id="image-input" src="">
+        <img type="file" class="file-upload-image" id="image-input" src="">
         <button class="file-upload-remove-button button">Заменить фото</button>
       </div>          
     </div> `;
@@ -56,28 +56,27 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     inputPhotoElement.addEventListener("change", () => {
       if (inputPhotoElement.files.length > 0) {
         uploadImgContainer.innerHTML = uploadImg;
-      } 
-      
-      // Отправляем фото в облако <input type="file" id="image-input" />
-      const fileInputElement = document.getElementById("image-input");
-      postImage({ file: fileInputElement.files[0] });
 
-      function postImage({ file }) {
-        const data = new FormData();
-        data.append("file", file);
+        // Отправляем фото в облако <input type="file" id="image-input" />
+        const fileInputElement = document.getElementById("image-input");
+        postImage({ file: fileInputElement.files });
 
-        return fetch(baseHost + "/api/upload/image", {
-          method: "POST",
-          body: data,
-        })
+        function postImage({ file }) {
+          const data = new FormData();
+          data.append("file", file);
+
+          return fetch(baseHost + "/api/upload/image", {
+            method: "POST",
+            body: data,
+          })
           .then((response) => {
             return response.json();
           })
           .then((data) => {
             console.log(data.fileUrl);
           });
-      }
-
+        }
+      }   
     }); 
     
     function newPost() {
