@@ -1,6 +1,7 @@
 // Добавляем посты:
 import { renderHeaderComponent } from "./header-component.js";
 import { uploadImage } from "../api.js";
+import { sanitizeHtml } from "../helpers.js";
 
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
@@ -67,7 +68,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
           document.getElementById("image-input").src = data.fileUrl;
           console.log(data.fileUrl);
         });        
-      }   
+      }; 
     });
     
     
@@ -82,8 +83,13 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
           return;
         };
 
+        if (inputPhotoElement.files.length === 0) {
+          alert('Вы не добавили фото')
+          return;          
+        }
+
         onAddPostClick({
-          description: trimmedText,
+          description: sanitizeHtml(trimmedText),
           imageUrl: document.getElementById("image-input").src,
         });
       });      
