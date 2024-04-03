@@ -57,10 +57,9 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     inputPhotoElement.addEventListener("change", () => {
       if (inputPhotoElement.files.length > 0) {
         uploadImgContainer.innerHTML = uploadImg;
-    
+            
         // Получаем файл из inputPhotoElement
-        const file = inputPhotoElement.files[0];
-    
+        const file = inputPhotoElement.files[0];    
         // Отправляем фото в облако
         uploadImage({ file })
         .then((data) => {
