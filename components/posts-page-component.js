@@ -11,7 +11,7 @@ export function renderPostsPageComponent({ appEl }) {
   // * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
   
   const postHtml = posts
-  .map((post, index) => {
+  .map((post) => {
     return ` 
             <li class="post" id="post">
               <div class="post-header" data-user-id="${post.user.id}">
@@ -25,7 +25,8 @@ export function renderPostsPageComponent({ appEl }) {
 
               <div class="post-likes">
                 <button data-post-id="${post.id}" data-is-liked="${post.isLiked}" class="like-button
-                  ${post.isLiked ? "like-active" : ""}" "data-index="${post.user.id}">                  
+                  ${post.isLiked ? "like-active" : ""}" "data-index="${post.user.id}">  
+                  <img src="./assets/images/like-not-active.svg">             
                 </button>
 
                 <p class="post-likes-text">
