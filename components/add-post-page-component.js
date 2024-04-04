@@ -4,10 +4,11 @@ import { uploadImage } from "../api.js";
 import { sanitizeHtml } from "../helpers.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 
+let imageUrl = '';
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   const render = () => {
-    // TODO: Реализовать страницу добавления поста
+    // Страница добавления поста
     const appHtml = `
     <div class="page-container">
       <div class="header-container"></div>
@@ -42,46 +43,18 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     appEl.innerHTML = appHtml;
 
 
-    const inputPhotoElement = document.getElementById("image-input");
     const inputTextElement = document.getElementById("add-text");
-
     const uploadImgContainer = document.querySelector(".upload-image-container");
-    
-    const uploadImg = `
-    <div class="upload-image">      
-      <div class="file-upload-image-conrainer">
-        <img type="file" class="file-upload-image" id="image-input" src="">
-        <button class="file-upload-remove-button button">Заменить фото</button>
-      </div>          
-    </div> `;
 
-    inputPhotoElement.addEventListener("change", () => {
 
-      if (inputPhotoElement.files.length > 0) {
-
-        // renderUploadImageComponent({
-        //   element: document.querySelector(".upload-image-container"),
-        //   onImageUrlChange: (imageUrl) => {
-        //     document.getElementById("image-input").src = imageUrl;
-        //   }
-        // });
-        
-
-        uploadImgContainer.innerHTML = uploadImg;
-            
-        // Получаем файл из inputPhotoElement
-        const file = inputPhotoElement.files[0];    
-        // Отправляем фото в облако
-        uploadImage({ file })
-        .then((data) => {
-          // Кладем URL в атрибут src изображения
-          document.getElementById("image-input").src = data.fileUrl;
-          console.log(data.fileUrl);
-        });        
-      }; 
+    renderUploadImageComponent({
+      element: uploadImgContainer,
+      onImageUrlChange: (newImageUrl) => {
+        imageUrl = newImageUrl;
+      }
     });
     
-    
+        
     function newPost() {
       document.getElementById("add-button").addEventListener("click", () => {
         
@@ -93,14 +66,14 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
           return;
         };
 
-        if (inputPhotoElement.files.length === 0) {
+        if (imageUrl === '') {
           alert('Вы не добавили фото')
           return;          
         }
 
         onAddPostClick({
           description: sanitizeHtml(trimmedText),
-          imageUrl: document.getElementById("image-input").src,
+          imageUrl: imageUrl,
         });
       });      
     };
