@@ -2,6 +2,7 @@
 import { renderHeaderComponent } from "./header-component.js";
 import { uploadImage } from "../api.js";
 import { sanitizeHtml } from "../helpers.js";
+import { renderUploadImageComponent } from "./upload-image-component.js";
 
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
@@ -55,7 +56,17 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     </div> `;
 
     inputPhotoElement.addEventListener("change", () => {
+
       if (inputPhotoElement.files.length > 0) {
+
+        // renderUploadImageComponent({
+        //   element: document.querySelector(".upload-image-container"),
+        //   onImageUrlChange: (imageUrl) => {
+        //     document.getElementById("image-input").src = imageUrl;
+        //   }
+        // });
+        
+
         uploadImgContainer.innerHTML = uploadImg;
             
         // Получаем файл из inputPhotoElement
