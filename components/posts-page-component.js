@@ -25,12 +25,11 @@ export function renderPostsPageComponent({ appEl }) {
 
               <div class="post-likes">
                 <button data-post-id="${post.id}" data-is-liked="${post.isLiked}" class="like-button
-                  ${post[index].isLiked ? "like-active" : ""}" "data-index="${post.user.id}">
-                  ${likeImg}
+                  ${post.isLiked ? "like-active" : ""}" "data-index="${post.user.id}">                  
                 </button>
 
                 <p class="post-likes-text">
-                  Нравится: <strong>${likes}</strong>
+                  Нравится: <strong>${post.likes}</strong>
                 </p>
               </div>
 
