@@ -7,12 +7,6 @@ import { formatDistanceToNow } from "date-fns";
 import { ru } from 'date-fns/locale';
  
 export function renderPostsPageComponent({ appEl }) {
-  // TODO: реализовать рендер постов из api
-  console.log("Актуальный список постов:", posts);
-
-  
-  // * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
-  // * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
     
   const postHtml = posts
   .map((post, index) => {
@@ -33,7 +27,7 @@ export function renderPostsPageComponent({ appEl }) {
                   <img src="./assets/images/${post.isLiked ? "like-active.svg" : "like-not-active.svg"}">
                 </button>
 
-                <p class="post-likes-text">
+                <p data-index=${index} class="post-likes-text">
                   Нравится: <strong>${post.likes.length}</strong>
                 </p>
               </div>
@@ -72,29 +66,29 @@ export function renderPostsPageComponent({ appEl }) {
     });
   }
 
-  renderLike();
-}
-
-function renderLike() {
-  const likesButtons = document.querySelectorAll(".like-button");
-
-  likesButtons.forEach((likesButton, index) => {
-    likesButton.addEventListener("click", () => {
-      const currentPost = posts[index];
-      const likeStatus = (likesButton.dataset.like === "true") ? "dislike" : "like";
-
-      like({
-        token: getToken(), 
-        currentPost, 
-        likeStatus 
-      })
-      .then((updatedPost) => {
-        likesButton.dataset.like = updatedPost.isLiked;
-        likesButton.querySelector("img").src = `./assets/images/${updatedPost.isLiked ? "like-active.svg" : "like-not-active.svg"}`;
-        document.querySelector("strong").textContent = updatedPost.likes.length;
-      })
-
+  function renderLike() {
+    const likesButtons = document.querySelectorAll(".like-button");
+  
+    likesButtons.forEach((likesButton, index) => {
+      likesButton.addEventListener("click", () => {
+        const currentPost = posts[index];
+        const likeStatus = (likesButton.dataset.like === "true") ? "dislike" : "like";
+  
+        like({
+          token: getToken(), 
+          currentPost, 
+          likeStatus 
+        })
+        .then((updatedPost) => {
+          likesButton.dataset.like = updatedPost.isLiked;
+          likesButton.querySelector("img").src = `./assets/images/${updatedPost.isLiked ? "like-active.svg" : "like-not-active.svg"}`;
+          likesButton.nextElementSibling.querySelector("strong").textContent = updatedPost.likes.length;
+        })
+  
+      });
     });
-  });
+  
+  }
 
-}
+  renderLike();
+};
