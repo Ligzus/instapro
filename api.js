@@ -83,8 +83,20 @@ export function addPost({ token, description, imageUrl }) {
     }),
   }).then((response) => {
     if (response.status === 400) {
-      throw new Error("Неверный логин или пароль");
-    }
+      throw new Error("Неверный запрос");
+    } else if (response.status === 500) {
+      throw new Error("Ошибка сервера");
+    } 
+
     return response.json();
-  });
+  })
+  .catch((error) => {
+    if (error.message === "Ошибка сервера") {
+      alert('Севрвер прилег отдохнуть, пробуй еще раз...');            
+    } else if (error.message === "Неверный запрос") {
+      alert('Фото или описание не добавлены');
+    } else {
+      alert('Кажется, интернет прилег отдохнуть, проверь соединение...');
+    };        
+  })
 }
