@@ -1,8 +1,9 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
-const personalKey = "prod";
-const baseHost = "https://webdev-hw-api.vercel.app";
-const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
+const personalKey = "alex_poplaukhin";
+export const baseHost = "https://webdev-hw-api.vercel.app";
+export const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
+
 
 export function getPosts({ token }) {
   return fetch(postsHost, {
@@ -65,6 +66,60 @@ export function uploadImage({ file }) {
     method: "POST",
     body: data,
   }).then((response) => {
+    return response.json();    
+  })  
+}
+
+
+export function addPost({ token, description, imageUrl }) {
+  return fetch(postsHost , {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify({
+      description,
+      imageUrl,
+    }),
+  }).then((response) => {
+    if (response.status === 400) {
+      throw new Error("Неверный запрос");
+    } else if (response.status === 500) {
+      throw new Error("Ошибка сервера");
+    } 
+
     return response.json();
-  });
+  })
+  .catch((error) => {
+    if (error.message === "Ошибка сервера") {
+      alert('Севрвер прилег отдохнуть, пробуй еще раз...');            
+    } else if (error.message === "Неверный запрос") {
+      alert('Фото или описание не добавлены');
+    } else {
+      alert('Кажется, интернет прилег отдохнуть, проверь соединение...');
+    };        
+  })
+}
+
+export function like({ token, currentPost, likeStatus }) {
+  return fetch(postsHost + "/" + currentPost.id + "/" + likeStatus, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    }
+  }).then((response) => {
+    if (response.status === 401) {
+      throw new Error("Нет авторизации");
+    }
+
+    return response.json();
+  })
+  .then((data) => {
+    return data.post;
+  })
+  .catch((error) => {
+    if (error.message === "Нет авторизации") {
+      alert('Войдите в аккаунт или зарегистрируйтесь');            
+    }     
+  })  
 }

@@ -162,7 +162,7 @@
 }
 
 .form-error {
-  color: red;
+  background-color: rgb(255, 199, 199);
 }
 
 .form-footer {
