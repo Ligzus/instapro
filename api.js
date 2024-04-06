@@ -100,3 +100,26 @@ export function addPost({ token, description, imageUrl }) {
     };        
   })
 }
+
+export function like({ token, currentPost, likeStatus }) {
+  return fetch(postsHost + "/" + currentPost.id + "/" + likeStatus, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    }
+  }).then((response) => {
+    if (response.status === 401) {
+      throw new Error("Нет авторизации");
+    }
+
+    return response.json();
+  })
+  .then((data) => {
+    return data.post;
+  })
+  .catch((error) => {
+    if (error.message === "Нет авторизации") {
+      alert('Войдите в аккаунт или зарегистрируйтесь');            
+    }     
+  })  
+}
