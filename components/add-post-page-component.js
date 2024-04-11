@@ -1,6 +1,5 @@
 // Добавляем посты:
 import { renderHeaderComponent } from "./header-component.js";
-import { uploadImage } from "../api.js";
 import { sanitizeHtml } from "../helpers.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 
